@@ -3,3 +3,5 @@
 {'message': ['hello']}
 {'message': ["What's up?"]}
 {'message': ['Hi']}
+{'message': ['hi']}
+{'message': ['Hola']}
