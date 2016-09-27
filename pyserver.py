@@ -9,6 +9,7 @@ class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
         #status code
         self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', ' * ')
         file = open("messages.txt", 'r')
 
         #query = parse_qs(urlparse(self.path).query)
@@ -52,6 +53,7 @@ class MyServer(BaseHTTPRequestHandler):
     def do_POST(self):
         if self.path.endswith("/messages"):
             self.send_response(201)
+            self.send_header('Access-Control-Allow-Origin', ' * ')
             fileRead = open("messages.txt", "r")
             messagesLst = ""
             for lines in fileRead:
@@ -81,6 +83,7 @@ class MyServer(BaseHTTPRequestHandler):
 def run():
         listen = ("127.0.0.1", 8080)
         server = HTTPServer(listen, MyServer)
+        #file = open("messages.txt", 'w').close()
 
         print("Listening......")
         server.serve_forever()

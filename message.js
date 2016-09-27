@@ -1,6 +1,5 @@
 var sendButton = document.getElementById("send-button");
 var message = document.getElementById('message');
-var refreshButton = document.getElementById("refresh-button");
 
 //possibly try an on submit event?
 document.getElementById("message")
@@ -14,13 +13,20 @@ document.getElementById("message")
 sendButton.onclick = function (){
   postMessage(function(){
     console.log("Sent message")
+    document.getElementById('message').value = "";
+    getMessages(function(messages){
+      console.log("Success");
+      console.log(messages);
+        printMessages(messages[messages.length-1]);
+    },function(){
+      console.error("Had a problem")
+    });
   }, function(){
     console.error("Unable to send message")
   })
 }
 
 var postMessage = function (success, failure){
-  document.getElementsByName('message').value = "";
   var post = new XMLHttpRequest();
   post.onreadystatechange = function (){
     if (post.readyState == XMLHttpRequest.DONE){
@@ -38,23 +44,20 @@ console.log(message.value);
 post.send("message=" + message.value);
 };
 
-refreshButton.onclick = function (){
-  getMessages(function(){
-    console.log("Success")
-  },function(){
-    console.error("Had a problem")
-  })
-};
-
+function printMessages(item){
+  var lst = document.getElementById('message-list');
+  var listItem = document.createElement("li");
+  listItem.innerHTML = item['message'];
+  lst.appendChild(listItem);
+}
 
 var getMessages = function (success, failure){
   var request = new XMLHttpRequest();
   request.onreadystatechange = function (){
     if (request.readyState == XMLHttpRequest.DONE){
       if (request.status >= 200 && request.status < 400) {
-        //messages = JSON.parse(request.responseText);
-        //console.log(messages);
-        success();
+        messages = JSON.parse(request.responseText);
+        success(messages);
       } else {
         failure();
       }
@@ -63,3 +66,21 @@ var getMessages = function (success, failure){
   request.open("GET", "http://localhost:8080/messages");
   request.send();
 };
+
+  var request = new XMLHttpRequest();
+  request.onreadystatechange = function (){
+    if (request.readyState == XMLHttpRequest.DONE){
+      if (request.status >= 200 && request.status < 400) {
+        messages = JSON.parse(request.responseText);
+        console.log("Messages Loaded");
+        console.log(messages);
+        for (var i = 0, len = messages.length; i <len; i++){
+          printMessages(messages[i]);
+        }
+      } else {
+        console.error("Couldn't load messages!");
+      }
+    }
+  };
+request.open("GET", "http://localhost:8080/messages");
+request.send();
