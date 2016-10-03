@@ -1,5 +1,2 @@
-{}
-{'message': ['Hello']}
-{'message': ['How']}
-{'message': ['Are']}
-{'message': ['You']}
+{'message': ['go to the store']}
+{'message': ['remember to pick up grandpa from his doctor appointment']}

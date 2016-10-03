@@ -75,7 +75,6 @@ class MyServer(BaseHTTPRequestHandler):
             file = open("messages.txt", 'w')
             file.write(messagesLst)
             file.close()
-
         else:
             self.send_response(404)
         return
